@@ -135,10 +135,11 @@ function retry(/* func, attempts */) {
  *
  */
 function logger(func, logFunc) {
-  return function b(...args) {
-    logFunc(`${func.name}(${JSON.stringify(args).slice(1, -1)}) starts`);
-    const res = func(args);
-    logFunc(func.name, '(', args, ')', 'ends');
+  return (...arg) => {
+    const argJson = JSON.stringify(arg).slice(1, -1);
+    logFunc(`${func.name}(${argJson}) starts`);
+    const res = func.apply(undefined, [...arg]);
+    logFunc(`${func.name}(${argJson}) ends`);
     return res;
   };
 }
